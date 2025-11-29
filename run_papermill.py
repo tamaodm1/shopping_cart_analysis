@@ -36,7 +36,7 @@ pm.execute_notebook(
     kernel_name="python3",
 )
 
-# Chạy Notebook Apriori Modeling
+# Chạy Notebook Apriori Modelling
 pm.execute_notebook(
     "notebooks/apriori_modelling.ipynb",
     "notebooks/runs/apriori_modelling_run.ipynb",
