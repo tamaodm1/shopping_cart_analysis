@@ -1,9 +1,13 @@
 import papermill as pm
 import os
 
+# Tạo thư mục lưu kết quả nếu chưa có
 os.makedirs("notebooks/runs", exist_ok=True)
 
-# run_preprocessing_and_eda.py
+# ---------------------------------------------------------
+# BƯỚC 1: LÀM SẠCH DỮ LIỆU & EDA
+# ---------------------------------------------------------
+print("--- Đang chạy Notebook 1: Preprocessing & EDA ---")
 pm.execute_notebook(
     "notebooks/preprocessing_and_eda.ipynb",
     "notebooks/runs/preprocessing_and_eda_run.ipynb",
@@ -20,8 +24,10 @@ pm.execute_notebook(
     kernel_name="python3",
 )
 
-# run_basket_preparation.py
-
+# ---------------------------------------------------------
+# BƯỚC 2: CHUẨN BỊ GIỎ HÀNG (BASKET PREPARATION)
+# ---------------------------------------------------------
+print("--- Đang chạy Notebook 2: Basket Preparation ---")
 pm.execute_notebook(
     "notebooks/basket_preparation.ipynb",
     "notebooks/runs/basket_preparation_run.ipynb",
@@ -36,7 +42,10 @@ pm.execute_notebook(
     kernel_name="python3",
 )
 
-# Chạy Notebook Apriori Modelling
+# ---------------------------------------------------------
+# BƯỚC 3: KHAI PHÁ LUẬT APRIORI (APRIORI MODELLING)
+# ---------------------------------------------------------
+print("--- Đang chạy Notebook 3: Apriori Modelling ---")
 pm.execute_notebook(
     "notebooks/apriori_modelling.ipynb",
     "notebooks/runs/apriori_modelling_run.ipynb",
@@ -44,16 +53,16 @@ pm.execute_notebook(
         BASKET_BOOL_PATH="data/processed/basket_bool.parquet",
         RULES_OUTPUT_PATH="data/processed/rules_apriori_filtered.csv",
 
-        # Tham số Apriori
-        MIN_SUPPORT=0.01,
+        # --- QUAN TRỌNG: Đã tăng support lên 0.02 để tránh tràn RAM ---
+        MIN_SUPPORT=0.02, 
         MAX_LEN=3,
 
         # Generate rules
         METRIC="lift",
         MIN_THRESHOLD=1.0,
 
-        # Lọc luật
-        FILTER_MIN_SUPPORT=0.01,
+        # Lọc luật (Phải khớp với min_support ở trên)
+        FILTER_MIN_SUPPORT=0.02,
         FILTER_MIN_CONF=0.3,
         FILTER_MIN_LIFT=1.2,
         FILTER_MAX_ANTECEDENTS=2,
@@ -62,16 +71,14 @@ pm.execute_notebook(
         # Số luật để vẽ
         TOP_N_RULES=20,
 
-        # Tắt plot khi chạy batch (bật = True nếu muốn xem hình)
+        # Tắt plot khi chạy tự động (bật = True nếu muốn xem hình)
         PLOT_TOP_LIFT=False,
         PLOT_TOP_CONF=False,
         PLOT_SCATTER=False,
         PLOT_NETWORK=False,
-        PLOT_PLOTLY_NETWORK=False,
         PLOT_PLOTLY_SCATTER=False,  
     ),
     kernel_name="python3",
 )
 
-
-print("Đã chạy xong pipeline")
+print("=== ĐÃ CHẠY XONG TOÀN BỘ PIPELINE THÀNH CÔNG! ===")
